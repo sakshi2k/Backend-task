@@ -7,10 +7,10 @@
 </head>
 <body>
     
-    <form action="/">
+    <form action="/admin/verify" method="POST">
         <label for="secretToken">Secret Token</label>
-        <input type="text" name="secretToken" class="form-control" placeholder="Secret Token">
         <input type="text" name="email" class="form-control" placeholder="abc@domain.com">
+        <input type="text" name="secretToken" class="form-control" placeholder="Secret Token">
         <br/>
         <button type="submit" class="btn btn-large btn-primary">Verify</button>
     </form>

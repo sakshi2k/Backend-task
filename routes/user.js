@@ -7,14 +7,14 @@ const app = express();
 
 /* ************************************** Routes ************************************* */
 
-app.route("/")
+app.route("/user")
     // desc : Renders home page
     .get((req, res) => {
-        res.render("register");
+        res.render("user-register");
     })
 
     // desc :  CREATE - Create a single user
-    .post((req, res) => {
+    .post(async(req, res) => {
         const {userName, caption, phoneNo, email, address, age, occupation} = req.body;
 
         const newUser = new User({
@@ -27,15 +27,18 @@ app.route("/")
             occupation : occupation
         });
 
+        console.log("hey", req.body);
+
         try {    
-            User.findOne({email : email}, (err, foundUser) => {
+            User.findOne({email : email}, async(err, foundUser) => {
                 if(!err) {
 
                     // check if user already registered.
                     if(foundUser){
                         res.send("User already registered with this email ID.!");
                     } else {
-                        newUser.save();
+                        await newUser.save()
+                        
                         res.send("User registered successfully.");
                     }            
                 }
@@ -55,9 +58,9 @@ app.route("/")
 app.route("/user/:userEmail")
 
     // desc : GET - To get details of a single User
-    .get((req, res) => {
+    .get(async(req, res) => {
         try {
-            User.findOne({email : req.params.userEmail}, (err, foundUser) => {
+            User.findOne({email : req.params.userEmail}, async(err, foundUser) => {
                 if(!err){
                     console.log("No error1");
                     if(foundUser){
@@ -83,9 +86,9 @@ app.route("/user/:userEmail")
     })
 
     // desc :  EDIT - Edit the details of a single user
-    .patch((req, res) => {
+    .patch(async(req, res) => {
         try{
-            User.findOne({email : req.params.userEmail}, (err, foundUser) => {
+            User.findOne({email : req.params.userEmail}, async(err, foundUser) => {
                 if(!err)
                     if(foundUser){
                         console.log(foundUser);
@@ -116,7 +119,7 @@ app.route("/user/:userEmail")
     })
 
     // desc : DELETE - Delete a single user entry from the User table
-    .delete((req, res) => {
+    .delete(async(req, res) => {
         try{
             User.deleteOne({email : req.params.userEmail}, (err) => {
                 if(!err){
@@ -135,7 +138,7 @@ app.route("/user/:userEmail")
     })
 
 // desc : LIST - List all the users present in the User table
-app.get("/users/findAll", (req, res) => {
+app.get("/users/findAll", async(req, res) => {
 
     User.find({}, (err, foundUser) => {
         res.send(foundUser);

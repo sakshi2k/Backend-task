@@ -1,23 +1,29 @@
 const express = require("express");
-const routes = require('express');
 const randomString = require("randomstring");
+const bodyParser = require("body-parser");
 
 const Admin = require('../models/Admin');
 
 const app = express();
 
+app .use(bodyParser.urlencoded({ extended: true }))
+    .use(express.static("public"));
+
 /* ************************************** Routes ************************************* */
 
-app.route("/submit-admin")
+app.route("/admin")
 
     // desc : Renders home page
     .get((req, res) => {
-        res.render("register");
+        res.render("admin-register");
     })
 
     // desc :  CREATE - Create an ADMIN User.
     .post(async(req, res) => {
     const {userName, caption, phoneNo, email, address, age, occupation} = req.body;
+
+
+    console.log("hey", req.body);
 
     const newAdmin = new Admin({
         userName : userName,
@@ -30,19 +36,19 @@ app.route("/submit-admin")
     });
 
     try {    
-        Admin.findOne({email : email}, (err, foundUser) => {
+        Admin.findOne({email : email}, async(err, foundUser) => {
             if(!err) {
                 // check if user already registered.
                 if(foundUser){
                     res.send("ADMIN already registered with this email ID.!");
                 } else {
-                    newAdmin.save();
 
                     // Generate secret token
                     const secretToken = randomString.generate(16);
 
                     newAdmin.secretToken = secretToken;
 
+                    await newAdmin.save();
                     // res.send("ADMIN registered successfully.");
                     res.send("Check your mail to Verify your account.");
                 }            
@@ -70,7 +76,7 @@ app.route("/admin/verify")
         const {secretToken, email} = req.body;
 
         // find the account that matches with the admin using email.
-        Admin.findOne({email : email}, (err, foundAdmin) => {
+        Admin.findOne({email : email}, async(err, foundAdmin) => {
             if(!err){
                 if(!foundAdmin) {
                     req.flash('error', "Admin not found")
@@ -79,13 +85,16 @@ app.route("/admin/verify")
                     if(foundAdmin.secretToken === secretToken) {
                         foundAdmin.active = true;   // false by default
                         foundAdmin.secretToken = '';
-                        // req.flash('success', "Congratulations, You are not registered.!")
                         foundAdmin.save();
+                        res.send({
+                            success : true,
+                            message : "Congratulations, You are not registered.!"
+                        }) 
                     } else {
-                        // req.flash('error', "Wrong Secret Token")
+                        // Wrong Secret Token
                         return res.json({
                             success : "false",
-                            message : err
+                            message : "Wrong Secret token"
                         });
                     }
                 }
