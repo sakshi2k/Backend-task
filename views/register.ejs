@@ -10,8 +10,8 @@
 <body style="margin: 20px;">
     <div class="container">
         <h4 style="margin-bottom: 12px;">Enter your details</h4>
-        <div style="width: 50%;">    
-            <form action="/" method="POST">
+            
+        <form action="" method="POST">
             <label>Name</label>
             <input type="text" name="userName" required/><br/>
             <label>Profile Picture</label>
@@ -29,14 +29,12 @@
             <label>Occupation</label>
             <input type="text" name="occupation" required/><br/>
 
-        </div>
-
-        <div style="width: 50%;">    
-            
-        </div>
-        <p name="successMessage"></p>
-        <button type="submit" class="btn btn-success">Submit</button>
-    </form>
+            <p name="successMessage"></p>
+            <button type="submit" onclick="javascript: form.action='/';"
+                class="btn btn-success">Register as USER</button>
+            <button type="submit" onclick="javascript: form.action='/submit-admin';"
+                class="btn btn-success">Register as ADMIN</button>
+        </form>
 
     </div>
 

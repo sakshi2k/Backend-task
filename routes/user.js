@@ -7,61 +7,59 @@ const app = express();
 
 /* ************************************** Routes ************************************* */
 
-// REST implementation at HOME ROUTE.
 app.route("/")
-
-    // desc : CREATE - Create a single user
-    .get((req,res) => {    
-    res.render("home");
+    // desc : Renders home page
+    .get((req, res) => {
+        res.render("register");
     })
 
-    // desc :  new User creation
+    // desc :  CREATE - Create a single user
     .post((req, res) => {
-    const {userName, caption, phoneNo, email, address, age, occupation} = req.body;
+        const {userName, caption, phoneNo, email, address, age, occupation} = req.body;
 
-    const newUser = new User({
-        userName : userName,
-        caption : caption, 
-        phoneNo : phoneNo, 
-        email : email, 
-        address : address, 
-        age : age, 
-        occupation : occupation
-    });
+        const newUser = new User({
+            userName : userName,
+            caption : caption, 
+            phoneNo : phoneNo, 
+            email : email, 
+            address : address, 
+            age : age, 
+            occupation : occupation
+        });
 
-    try {    
-        User.findOne({email : email}, (err, foundUser) => {
-            if(!err) {
+        try {    
+            User.findOne({email : email}, (err, foundUser) => {
+                if(!err) {
 
-                // check if user already registered.
-                if(foundUser){
-                    res.send("User already registered with this email ID.!");
-                } else {
-                    newUser.save();
-                    res.send("User registered successfully.");
-                    res.status(200).json({ message: 'Connected!' });
-                    // res.send(500,'showAlert') ;
-                }            
-            }
-        
-        })   
-    } catch (err) {
-        return res.json({
-            success: false,
-            message: err
-        })
-    }
+                    // check if user already registered.
+                    if(foundUser){
+                        res.send("User already registered with this email ID.!");
+                    } else {
+                        newUser.save();
+                        res.send("User registered successfully.");
+                    }            
+                }
+            
+            })   
+        } catch (err) {
+            return res.json({
+                success: false,
+                message: err
+            })
+        }
 
 });
 
-// REST implementation at :userEmailId ROUTE.
 
-app.route("/user/:userEmailId")
+// desc : REST implementation at  ROUTE.
+app.route("/user/:userEmail")
 
+    // desc : GET - To get details of a single User
     .get((req, res) => {
         try {
-            User.findOne({email : req.params.userEmailId}, (err, foundUser) => {
+            User.findOne({email : req.params.userEmail}, (err, foundUser) => {
                 if(!err){
+                    console.log("No error1");
                     if(foundUser){
                         return res.json({
                             success : true,
@@ -82,16 +80,67 @@ app.route("/user/:userEmailId")
                 message : "Error : " + err
             });
         }
-    });
+    })
 
-    // .post((req, res) => {
+    // desc :  EDIT - Edit the details of a single user
+    .patch((req, res) => {
+        try{
+            User.findOne({email : req.params.userEmail}, (err, foundUser) => {
+                if(!err)
+                    if(foundUser){
+                        console.log(foundUser);
+                        User.updateOne(
+                            {email: req.params.userEmail}, 
+                            {$set : req.body},
+                            function(err){
+                                if(!err){
+                                    // req.flash('success', "Changes saved.!")
+                                    res.send("Successfully updated");
+                                } else {
+                                    res.send(err);
+                                }
+                            }
+                        );
+                    } else {
+                        // req.flash('error', "No user found.!")
+                        res.send("User not found");
+                    }
+            });
+        }
+        catch (err){
+            return res.json({
+                success : false,
+                message : "Error : " + err
+            });
+        }
+    })
 
-    // })
+    // desc : DELETE - Delete a single user entry from the User table
+    .delete((req, res) => {
+        try{
+            User.deleteOne({email : req.params.userEmail}, (err) => {
+                if(!err){
+                    res.send("Successfully deleted : " + req.params.userEmail);
+                } else {
+                    res.send(err);
+                }
+            })
+        } 
+        catch (err){
+            return res.json({
+                success : false,
+                message : "Error : " + err
+            });
+        }
+    })
 
-    // .delete((req, res) => {
+// desc : LIST - List all the users present in the User table
+app.get("/users/findAll", (req, res) => {
 
-    // })
+    User.find({}, (err, foundUser) => {
+        res.send(foundUser);
+    })
+});
 
 
-
-module.exports = routes;
+module.exports = app;

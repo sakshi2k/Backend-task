@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
+const adminSchema = new mongoose.Schema({
     userName : {
         type : String,
         required: true,
@@ -33,29 +33,29 @@ const userSchema = new mongoose.Schema({
     },
     
     age: {
-        type : String,
         required: true,
+        type : String,
         trim: true,
         default: 'N/A'
     },
     
     occupation : {
+        required: true,
         type : String,
         trim: true,
         default: 'N/A'
-    }, 
-
-    role: {
-        type: Number,
-        default: 0
-        // user -> 0 and admin -> 1.
     },
 
-    isAuthenticated : {
+    secretToken : {
+        type : String,
+        default : 'N/A'
+    },
+
+    active : {
         type : Boolean,
-        default: false
+        default : false
     }
-    
+
 });
 
-module.exports = User = mongoose.model("User", userSchema);
+module.exports = Admin = mongoose.model("Admin", adminSchema);
