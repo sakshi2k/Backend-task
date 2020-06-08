@@ -8,10 +8,10 @@ A NodeJS application for user and admin registration with REST APIs implementati
     - Authentication status update for Users by Admin
   Admin approval  (User authentication)
     - Admin authentication confirmation through email
-2. CRUD operations on users
-3. Update Details of users
-  -- individually by ID
-  -- all users
+2. CRUD operations on users 
+3. Update Details of users 
+    - individually by ID
+    - all users
   
 #### Routes 
  

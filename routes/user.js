@@ -8,12 +8,12 @@ const app = express();
 /* ************************************** Routes ************************************* */
 
 app.route("/user")
-    // desc : Renders home page
+    // desc : Renders registration page
     .get((req, res) => {
         res.render("user-register");
     })
 
-    // desc :  CREATE - Create a single user
+    // desc :  CREATE - Create a user
     .post(async(req, res) => {
         const {userName, caption, phoneNo, email, address, age, occupation} = req.body;
 
@@ -85,7 +85,7 @@ app.route("/user/:userEmail")
         }
     })
 
-    // desc :  EDIT - Edit the details of a single user
+    // desc :  EDIT - Edits the details of a single user
     .patch(async(req, res) => {
         try{
             User.findOne({email : req.params.userEmail}, async(err, foundUser) => {
@@ -122,7 +122,7 @@ app.route("/user/:userEmail")
         }
     })
 
-    // desc : DELETE - Delete a single user entry from the User table
+    // desc : DELETE - Deletes a single user entry from the User table
     .delete(async(req, res) => {
         try{
             User.deleteOne({email : req.params.userEmail}, (err) => {
@@ -141,7 +141,7 @@ app.route("/user/:userEmail")
         }
     })
 
-// desc : LIST - List all the users present in the User table
+// desc : LIST - Lists all the users present in the User table
 app.get("/users/findAll", async(req, res) => {
 
     User.find({}, (err, foundUser) => {

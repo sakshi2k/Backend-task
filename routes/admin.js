@@ -17,7 +17,7 @@ app .use(bodyParser.urlencoded({ extended: true }))
 
 app.route("/admin")
 
-    // desc : Renders home page
+    // desc : Renders registration page
     .get((req, res) => {
         res.render("admin-register");
     })
@@ -105,12 +105,13 @@ app.route("/admin")
 });
 
 
-// desc : Verify Admin account via Secret Code
 app.route("/admin/verify")
+    // desc : To Verify Admin account via Secret Code
     .get((req, res) => {
         res.render("verify-admin");
     })
 
+    // Authenticated Registeration
     .post(async(req, res, next) => {
         try{
         const {secretToken, email} = req.body;
@@ -148,10 +149,9 @@ app.route("/admin/verify")
         }
     });
 
-
+// desc : To authenticate new users
 app.route("/admin/authenticateUsers")
     
-    // desc : authenticate new users
     .get(async (req, res) => {
 
         const unauthenticatedUsers = await User.find({isAuthenticated : "false"});// (err, foundUser) => {
