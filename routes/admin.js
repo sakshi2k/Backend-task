@@ -2,6 +2,8 @@ const express = require("express");
 const randomString = require("randomstring");
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer"); 
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
 
 const Admin = require('../models/Admin');
 const User = require('../models/User');
@@ -11,7 +13,6 @@ const app = express();
 app .use(bodyParser.urlencoded({ extended: true }))
     .use(express.static("public"));
 
-let unauthenticatedUsers = [];
 /* ************************************** Routes ************************************* */
 
 app.route("/admin")
@@ -22,8 +23,9 @@ app.route("/admin")
     })
 
     // desc :  CREATE - Create an ADMIN User.
-    .post(async(req, res) => {
+    .post(upload.single('avatar'), async(req, res) => {
     const {userName, caption, phoneNo, email, address, age, occupation} = req.body;
+    const avatar = req.file;
 
     const newAdmin = new Admin({
         userName : userName,
@@ -32,7 +34,8 @@ app.route("/admin")
         email : email, 
         address : address, 
         age : age, 
-        occupation : occupation
+        occupation : occupation,
+        
     });
 
     try {    
@@ -86,7 +89,7 @@ app.route("/admin")
                         success : true,
                         message : "Check your mail to Verify your account",
                         // for testingPurpose only
-                        testingPurposeOnly: "OR visit" + nodemailer.getTestMessageUrl(info)                    
+                        testingPurposeOnly: "OR visit  " + nodemailer.getTestMessageUrl(info)                    
                     });
                 }            
             }
@@ -105,7 +108,7 @@ app.route("/admin")
 // desc : Verify Admin account via Secret Code
 app.route("/admin/verify")
     .get((req, res) => {
-        res.render("verify");
+        res.render("verify-admin");
     })
 
     .post(async(req, res, next) => {
@@ -145,23 +148,33 @@ app.route("/admin/verify")
         }
     });
 
-// desc : authenticate new users
+
 app.route("/admin/authenticateUsers")
+    
+    // desc : authenticate new users
+    .get(async (req, res) => {
 
-    .get((req, res) => {
-
-        unauthenticatedUsers = [""];
-        User.find({isAuthenticated : "false"}, (err, foundUser) => {
+        const unauthenticatedUsers = await User.find({isAuthenticated : "false"});// (err, foundUser) => {
             
-            
-            foundUser.forEach(function(user) {
-                unauthenticatedUsers.push(user);
-                // console.log(user.userName);
-                // console.log(unauthenticatedUsers[1], unauthenticatedUsers[2], unauthenticatedUsers[3]);
-            })
-        })
         res.render("authenticateUsers", {users : unauthenticatedUsers });
+    })
+    
+    .post(async (req, res) => { 
+        
+        const authticatedUserId = req.body.choice;                   // mongo based _id
+
+        User.findById({_id : authticatedUserId}, async(err, foundUser) => {
+            if(!err){
+                if(foundUser){
+                    foundUser.isAuthenticated = true;
+                    await foundUser.save();
+                }
+            } else {
+                res.send(err);
+            }
+        })
+
+        res.redirect("/admin/authenticateUsers");
     });
-    // .post();
 
 module.exports = app;

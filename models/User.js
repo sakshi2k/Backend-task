@@ -45,12 +45,6 @@ const userSchema = new mongoose.Schema({
         default: 'N/A'
     }, 
 
-    role: {
-        type: Number,
-        default: 0
-        // user -> 0 and admin -> 1.
-    },
-
     isAuthenticated : {
         type : Boolean,
         default: false

@@ -97,9 +97,15 @@ app.route("/user/:userEmail")
                             {$set : req.body},
                             function(err){
                                 if(!err){
-                                    res.send("Successfully updated");
+                                    return res.json({
+                                        success : true,
+                                        message :"Successfully updated"
+                                    });
                                 } else {
-                                    res.send(err);
+                                    return res.json({
+                                        success : true,
+                                        message : "ERROR occured while updating : " + err
+                                    });
                                 }
                             }
                         );
