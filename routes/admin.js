@@ -36,8 +36,10 @@ app.route("/admin")
     });
 
     try {    
+        // create admin with unique email.
         Admin.findOne({email : email}, async(err, foundUser) => {
             if(!err) {
+                
                 // check if user already registered.
                 if(foundUser){
                     res.send("ADMIN already registered with this email ID.!");

@@ -1,4 +1,12 @@
+.navbar{
+    background-color: grey;
+}
+
 .btn-choice{
     margin: 100px;
     text-align: center;
+}
+
+.nav-link{
+    color: rgb(58, 58, 58);
 }
