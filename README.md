@@ -4,10 +4,15 @@ A NodeJS application for user and admin registration with REST APIs implementati
 
 #### Salient features
 1. Models that includes Authentication via:
+
   Email id  (Admin authentication)
+
     - Authentication status update for Users by Admin
+
   Admin approval  (User authentication)
+
     - Admin authentication confirmation through email
+
 2. CRUD operations on users 
 3. Update Details of users 
     - individually by ID
