@@ -5,13 +5,11 @@ const nodemailer = require("nodemailer");
 const multer  = require('multer')
 const upload = multer({ dest: 'uploads/' })
 
+// Requiring Models
 const Admin = require('../models/Admin');
 const User = require('../models/User');
 
 const app = express();
-
-app .use(bodyParser.urlencoded({ extended: true }))
-    .use(express.static("public"));
 
 /* ************************************** Routes ************************************* */
 
@@ -25,8 +23,9 @@ app.route("/admin")
     // desc :  CREATE - Create an ADMIN User.
     .post(upload.single('avatar'), async(req, res) => {
     const {userName, caption, phoneNo, email, address, age, occupation} = req.body;
-    const avatar = req.file;
+    const avatar = req.file;                                        // multer dest: 'uploads/'
 
+    
     const newAdmin = new Admin({
         userName : userName,
         caption : caption, 
@@ -34,8 +33,8 @@ app.route("/admin")
         email : email, 
         address : address, 
         age : age, 
-        occupation : occupation,
-        
+        occupation : occupation
+        // avatar yet to be uploaded in DB        
     });
 
     try {    

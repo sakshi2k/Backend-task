@@ -15,26 +15,8 @@ A NodeJS application for user and admin registration with REST APIs implementati
   
 #### Routes 
  
-#####  USER ROUTES
- /user :
- 
-      get - Renders registration page
-      
-      post - Creates a user
-      
- /user/:userEmail :
- 
-      get - To get details of a single User
-      
-      patch - Edits the details of a single user
-      
-      delete - Deletes a single user entry from the User table
-      
- /users/findAll : 
- 
-      get - Lists all the users present in the User table
-  
 #####   ADMIN ROUTES
+
  /admin : 
  
       get - Renders registration page
@@ -53,7 +35,27 @@ A NodeJS application for user and admin registration with REST APIs implementati
       
       post - To authenticate new users 
       
+#####  USER ROUTES
+
+ /user :
+ 
+      get - Renders registration page
       
+      post - Creates a user
+      
+ /user/:userEmail :
+ 
+      get - To get details of a single User
+      
+      patch - Edits the details of a single user
+      
+      delete - Deletes a single user entry from the User table
+      
+ /users/findAll : 
+ 
+      get - Lists all the users present in the User table
+  
+
 ###### dependencies {
     "body-parser": "^1.19.0",
     "ejs": "^3.1.3",

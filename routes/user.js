@@ -1,9 +1,9 @@
 const express = require("express");
-const routes = require('express');
+const app = express();
 
+// Requiring Models
 const User = require('../models/User');
 
-const app = express();
 
 /* ************************************** Routes ************************************* */
 
@@ -27,8 +27,6 @@ app.route("/user")
             occupation : occupation
         });
 
-        console.log("hey", req.body);
-
         try {    
             User.findOne({email : email}, async(err, foundUser) => {
                 if(!err) {
@@ -50,7 +48,6 @@ app.route("/user")
                 message: err
             })
         }
-
 });
 
 
@@ -62,7 +59,6 @@ app.route("/user/:userEmail")
         try {
             User.findOne({email : req.params.userEmail}, async(err, foundUser) => {
                 if(!err){
-                    console.log("No error1");
                     if(foundUser){
                         return res.json({
                             success : true,
@@ -91,7 +87,6 @@ app.route("/user/:userEmail")
             User.findOne({email : req.params.userEmail}, async(err, foundUser) => {
                 if(!err)
                     if(foundUser){
-                        console.log(foundUser);
                         User.updateOne(
                             {email: req.params.userEmail}, 
                             {$set : req.body},
@@ -148,6 +143,5 @@ app.get("/users/findAll", async(req, res) => {
         res.send(foundUser);
     })
 });
-
 
 module.exports = app;
