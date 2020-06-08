@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authenticate</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body>
+    <div class="jumbotron">
+        <!-- <% %> -->
+        <% users .forEach(function(data){ %>
+            <form action="/admin/authenticateUsers" method="POST">
+                <div class="item">
+                    <% console.log("hh",data.userName); %>
+                    <p class="listItem">Name : <%= data.userName %></p>
+                    <br/>
+                    <button class="btn btn-secondary" name="choice" value="<%= data._id %>" >Accept</button>
+                    <button class="btn btn-secondary" name="choice" value="<%= data._id %>" >Reject</button>
+                </div>
+            </form>
+        <% }) %>
+    </div>
+</body>
+</html>

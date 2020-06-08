@@ -97,7 +97,6 @@ app.route("/user/:userEmail")
                             {$set : req.body},
                             function(err){
                                 if(!err){
-                                    // req.flash('success', "Changes saved.!")
                                     res.send("Successfully updated");
                                 } else {
                                     res.send(err);
@@ -105,7 +104,6 @@ app.route("/user/:userEmail")
                             }
                         );
                     } else {
-                        // req.flash('error', "No user found.!")
                         res.send("User not found");
                     }
             });
